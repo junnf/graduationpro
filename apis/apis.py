@@ -23,7 +23,7 @@ class Application(tornado.web.Application):
 
     def __init__(self):
         handlers = [
-               (r'/',Handler),
+               (r'/',LoginHandler),
                 ]
         settings = {
             "cookie_secret":"d2oEZ8T3TOqr1vhqDK2iIEilDgJ9OUO9lWyA+fGJ7tA=",
@@ -34,7 +34,7 @@ class Application(tornado.web.Application):
             "debug":True,
         }
         super(Application, self).__init__(handlers, **settings)
-        self.db = torndb.Connection('127.0.0.1','blog','root','ljn7168396123')
+        #  self.db = torndb.Connection('127.0.0.1','blog','root','ljn7168396123')
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -42,15 +42,20 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie("user")
 
-    @property
-    def db(self):
-        return self.application.db
+    #  @property
+    #  def db(self):
+        #  return self.application.db
+
+class LoginHandler(BaseHandler):
+
+    def get(self):
+        self.write("You get this message")
 
 
 def main():
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())
-    http_server.listen(options.port)
+    http_server.listen(8000)
     tornado.ioloop.IOLoop.instance().start()
 
 
