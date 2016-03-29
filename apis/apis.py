@@ -19,6 +19,7 @@ from tornado.options import options, define
 from modle import decorators
 import handler
 from handler import *
+import rsa
 
 
 class Application(tornado.web.Application):
@@ -47,4 +48,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
