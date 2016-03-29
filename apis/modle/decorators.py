@@ -2,6 +2,18 @@
 # encoding: utf-8
 from functools import wraps
 import ujson as json
+import copy
+
+class LoginMessage(object):
+
+    def __init__(self,code,message):
+        self.login_message = {
+            "login_code":code,
+            "login_message":message
+        }
+
+    def __repr__(self):
+        return json.dumps(self.login_message)
 
 def json_deco(func):
     @wraps(func)
@@ -10,7 +22,8 @@ def json_deco(func):
     return wrapper
 
 def main():
-    pass
+    ob = LoginMessage(1,"nihao")
+    print ob
 
 if __name__ == "__main__":
     main()

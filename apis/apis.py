@@ -34,7 +34,7 @@ class Application(tornado.web.Application):
             "debug":True,
         }
         super(Application, self).__init__(handlers, **settings)
-        #  self.db = torndb.Connection('127.0.0.1','blog','root','ljn7168396123')
+        #  self.db = torndb.Connection('127.0.0.1','blog','','')
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -50,6 +50,15 @@ class LoginHandler(BaseHandler):
 
     def get(self):
         self.write("You get this message")
+
+    def post(self):
+        _user = self.get_argument("user")
+        _pass = self.get_argument("pass")
+        if _user != '' and _pass != '':
+            #check
+            pass
+        else:
+            #return json code
 
 
 def main():
