@@ -5,6 +5,10 @@ import ujson as json
 import copy
 
 class LoginMessage(object):
+    """
+        code:,message
+        return json_stirng
+    """
 
     def __init__(self,code,message):
         self.login_message = {
