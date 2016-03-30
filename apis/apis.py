@@ -15,12 +15,13 @@ import tornado.web
 import tornado.ioloop
 import tornado.options
 
-from tornado.options import options, define
+from tornado.options import options
 from modle import decorators
 import handler
 from handler import *
 import rsa
-
+from setting import *
+import torndb
 
 class Application(tornado.web.Application):
 
@@ -36,7 +37,7 @@ class Application(tornado.web.Application):
             "debug":True,
         }
         super(Application, self).__init__(handlers, **settings)
-        #  self.db = torndb.Connection('127.0.0.1','blog','','')
+        self.db = torndb.Connection(options.host,options.dbname,options.user,options.password)
 
 
 def main():
