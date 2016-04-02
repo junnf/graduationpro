@@ -21,6 +21,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 //import java.util.logging.Handler;
 import java.util.logging.LogRecord;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import com.google.gson.Gson;
+
 
 
 public class LoginActivity extends Activity implements View.OnClickListener{
@@ -29,6 +33,9 @@ public class LoginActivity extends Activity implements View.OnClickListener{
     static int PORT_ = 8000;
     private Button login_button;
     private EditText login_user;
+    private StringBuffer string_getid = new StringBuffer();
+
+    //get string
     private EditText login_pass;
     private TextView responseText;
     @Override
@@ -38,6 +45,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         login_button = (Button)findViewById(R.id.loginbutton);
         login_user = (EditText)findViewById(R.id.loginuser);
         login_pass = (EditText)findViewById(R.id.loginpass);
+        //login_pass2 = (EditText)findViewById(R.id.loginpass2);
         responseText = (TextView)findViewById(R.id.abc);
         login_button.setOnClickListener(this);
     }
@@ -48,7 +56,11 @@ public class LoginActivity extends Activity implements View.OnClickListener{
             switch (msg.what){
                 case SHOW_RESPONSE:
                     String response = (String) msg.obj;
-                    responseText.setText(response);
+                    //Intent intent = new Intent(LoginActivity.this, ClassTable.class);
+                    finish();
+                    //startActivity(intent);
+
+                    //responseText.setText(response);
             }
 
         }
@@ -60,14 +72,24 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         //Toast.makeText(LoginActivity.this, "You clicked Button", Toast.LENGTH_SHORT).show();
         if (v.getId() == R.id.loginbutton){
             //Toast.makeText(LoginActivity.this, "You clicked Button", Toast.LENGTH_SHORT).show();
-            Lgn();
+                    Lgn();
         }
     }
 
+    public static boolean isChineseChar(String str){
+        boolean temp = false;
+        Pattern p= Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m=p.matcher(str);
+        if(m.find()){
+            temp =  true;
+        }
+        return temp;
+    }
+
     private  void getStringFromText(){
-            String user = login_user.getText().toString();
-            String pass = login_pass.getText().toString();
-            Toast.makeText(LoginActivity.this, user.concat(pass), Toast.LENGTH_SHORT).show();
+        String user = login_user.getText().toString();
+        String pass = login_pass.getText().toString();
+        Toast.makeText(LoginActivity.this, user.concat(pass), Toast.LENGTH_SHORT).show();
     }
 
     private void Lgn() {
@@ -81,7 +103,6 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                     URL url = new URL("http://114.215.84.22:8000");
                     connection=(HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("POST");
-                    //InputStream in = connection.getInputStream();
                     DataOutputStream out = new DataOutputStream(connection.getOutputStream());
                     out.writeBytes("username=junn&password=ljn7168396");
                     InputStream in = connection.getInputStream();
@@ -91,6 +112,8 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                     while((line = reader.readLine()) != null){
                         response.append(line);
                     }
+                    //Gson gson = new Gson();
+                    //response
                     Message message = new Message();
                     message.what = SHOW_RESPONSE;
                     message.obj = response.toString();

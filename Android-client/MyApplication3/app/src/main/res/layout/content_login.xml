@@ -49,7 +49,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="注   册"
+        android:text="登   录"
         android:id="@+id/loginbutton"
         android:textAlignment="center"
         android:textSize="20dp"
