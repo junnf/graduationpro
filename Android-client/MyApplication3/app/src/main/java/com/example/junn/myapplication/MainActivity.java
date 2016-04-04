@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(MainActivity.this, "You clicked Button1",
                 //   Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-                finish();
+
                 startActivity(intent);
             }
         });
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                finish();
+
                 startActivity(intent);
             }
         });

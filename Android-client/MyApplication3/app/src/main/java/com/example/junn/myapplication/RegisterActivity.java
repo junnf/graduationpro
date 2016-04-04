@@ -70,13 +70,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         RegisterJson json = gson.fromJson(jsondata, RegisterJson.class);
         fin_json.append(json.getName());
         fin_json.append(json.getId());
-        //List<RegisterJson> RegisterList = gson.fromJson(jsondata, new TypeToken<List<RegisterJson>>() {}.getType());
-        //for (RegisterJson aaa:RegisterList) {
-        //     fin_json.append(aaa.getId());
-        //     Toast.makeText(this,aaa.getId(),Toast.LENGTH_SHORT).show();
-        //     fin_json.append(aaa.getName());
-        //     Toast.makeText(this,aaa.getName(),Toast.LENGTH_SHORT).show();
-        //}
         return fin_json.toString();
     }
 

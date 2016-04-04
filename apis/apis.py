@@ -19,7 +19,6 @@ from tornado.options import options
 from modle import decorators
 import handler
 from handler import *
-import rsa
 from setting import *
 import torndb
 
@@ -27,7 +26,8 @@ class Application(tornado.web.Application):
 
     def __init__(self):
         handlers = [
-               (r'/register',LoginHandler),
+               (r'/register',RegisterHandler),
+               (r'/login',LoginHandler),
                 ]
         settings = {
             "cookie_secret":"d2oEZ8T3TOqr1vhqDK2iIEilDgJ9OUO9lWyA+fGJ7tA=",
