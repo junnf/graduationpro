@@ -22,6 +22,8 @@ from handler import *
 from setting import *
 import torndb
 
+_dic = {}
+
 class Application(tornado.web.Application):
 
     def __init__(self):

@@ -3,6 +3,7 @@
 
 import tornado.web
 import modle
+import ujson as json
 import md5
 
 
@@ -33,9 +34,42 @@ class LoginHandler(BaseHandler):
         #use rsa
         _t = md5.md5(_pass)
         token = _t.hexdigest()
-        with open("data/token.txt","w+") as f:
-            f.write(token)
+        #  with open("data/token.txt","w+") as f:
+            #  f.write(token)
+        _dic[token] = _user
         self.write({"id":1,"information":"{}".format(token)})
+
+class TableHandler(BaseHandler):
+
+    def get(self,input):
+        _temp = _dic.get(input,"")
+        if _temp == "":
+            self.write({"id":0,"information":"token is fault or not exist"})
+
+    def post(self):
+        """
+            get class information use json
+            0-6 weekday
+            1-6 coursenum
+            {
+                "id":1,
+                "data":{
+                    "0":{
+                       "1":{
+                             "coursename":"xxx",
+                             "courseid":int,
+                             "teacher":"abc",
+                             "extra":"是否存在其他课程"
+                           }
+                        }
+                       }
+            }
+        """
+        pass
+
+
+
+
 
 
 

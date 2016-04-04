@@ -18,6 +18,7 @@ import com.example.junn.myapplication.LoginJson;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -79,8 +80,8 @@ public class LoginActivity extends Activity implements View.OnClickListener{
             return null;
         }
 
-        //fin_json.append(json.getInformation());
-        //fin_json.append(json.getId());
+        fin_json.append(json.getInformation());
+        //return Token
         return fin_json.toString();
     }
 
@@ -89,8 +90,8 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         //Toast.makeText(LoginActivity.this, "You clicked Button", Toast.LENGTH_SHORT).show();
         if (v.getId() == R.id.loginbutton){
             //Toast.makeText(LoginActivity.this, "You clicked Button", Toast.LENGTH_SHORT).show();
-                    //Lgn(getpost());
-            save();
+            Lgn(getpost());
+
         }
     }
 
@@ -118,8 +119,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
     }
 
-    public void save() {
-        String data = "Data and fuck";
+    public void save(final String data) {
         FileOutputStream out = null;
         BufferedWriter writer = null;
         try {
@@ -137,6 +137,31 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getFile() {
+        FileInputStream in = null;
+        BufferedReader reader = null;
+        StringBuilder content = new StringBuilder();
+        try {
+            in = openFileInput("token");
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            while ((line = reader.readLine()) != null){
+                content.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return content.toString();
     }
 
     private void Lgn(final String post_data) {
