@@ -59,7 +59,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
             switch (msg.what){
                 case SHOW_RESPONSE:
                     String response = (String) msg.obj;
-
+                    save(response);
                     //Intent intent = new Intent(LoginActivity.this, ClassTable.class);
                     //finish();
                     //startActivity(intent);
@@ -172,7 +172,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                 try {
                     //Toast.makeText(LoginActivity.this, "You clicked Button", Toast.LENGTH_SHORT).show();
                     HttpURLConnection connection = null;
-                    URL url = new URL("http://114.215.84.22:8000");
+                    URL url = new URL("http://114.215.84.22:8000/login");
                     connection=(HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("POST");
                     DataOutputStream out = new DataOutputStream(connection.getOutputStream());
@@ -188,7 +188,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                     message.what = SHOW_RESPONSE;
                     String _temp = null;
                     if (parseJSON(response.toString()).equals(_temp)) {
-                        //return ;
+                        return ;
                     }
                     else {
                         message.obj = parseJSON(response.toString());
