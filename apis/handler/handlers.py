@@ -47,7 +47,8 @@ class CheckHandler(BaseHandler):
         _token = self.get_argument("token")
         #self.write("{'check','{}'}".format(_dic.get(_token,'not found')))
         #self.write("{'check':'{0}'}".format(_dic.get(_token,'not found')))
-        print _dic
+        if _dic.has_key(_token):
+            self.write('{"code":"0"}')
 
 
 class LoginHandler(BaseHandler):
