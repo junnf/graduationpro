@@ -8,6 +8,7 @@ import md5
 import traceback
 import torndb
 
+_dic = {}
 
 class BaseHandler(tornado.web.RequestHandler):
 
@@ -37,6 +38,18 @@ class RegisterHandler(BaseHandler):
                 self.write({"id":2,"information":"用户名不能重复"})
 
 
+class CheckHandler(BaseHandler):
+
+    def post(self):
+        """
+         {'check':'not found'}
+        """
+        _token = self.get_argument("token")
+        #self.write("{'check','{}'}".format(_dic.get(_token,'not found')))
+        #self.write("{'check':'{0}'}".format(_dic.get(_token,'not found')))
+        if _dic.has_key(_token):
+            self.write('{"code":"0"}')
+
 
 class LoginHandler(BaseHandler):
 
@@ -46,10 +59,9 @@ class LoginHandler(BaseHandler):
         #use rsa
         _t = md5.md5(_pass)
         token = _t.hexdigest()
-        #  with open("data/token.txt","w+") as f:
-            #  f.write(token)
         _dic[token] = _user
         self.write({"id":1,"information":"{}".format(token)})
+
 
 class TableHandler(BaseHandler):
 
