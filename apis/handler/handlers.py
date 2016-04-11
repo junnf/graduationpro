@@ -34,7 +34,7 @@ class RegisterHandler(BaseHandler):
             self.db.execute("INSERT INTO user VALUES(NULL,'{}','{}','{}','{}');".format(_user,_pass,_course,_sex))
         except Exception, e:
             if tuple(e)[0] == 1062:
-                self.write({"id":2,u"information":u"用户名不能重复"})
+                self.write({"id":2,"information":"用户名不能重复"})
 
 
 
