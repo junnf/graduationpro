@@ -8,6 +8,7 @@ import md5
 import traceback
 import torndb
 
+_dic = {}
 
 class BaseHandler(tornado.web.RequestHandler):
 
