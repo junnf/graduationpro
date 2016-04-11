@@ -38,6 +38,17 @@ class RegisterHandler(BaseHandler):
                 self.write({"id":2,u"information":u"用户名不能重复"})
 
 
+class CheckHandler(BaseHandler):
+
+    def post(self):
+        """
+         {'check':'not found'}
+        """
+        _token = self.get_argument("token")
+        #self.write("{'check','{}'}".format(_dic.get(_token,'not found')))
+        #self.write("{'check':'{0}'}".format(_dic.get(_token,'not found')))
+        print _dic
+
 
 class LoginHandler(BaseHandler):
 
