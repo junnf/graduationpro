@@ -5,6 +5,8 @@ import tornado.web
 import modle
 import ujson as json
 import md5
+import traceback
+import torndb
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -14,17 +16,27 @@ class BaseHandler(tornado.web.RequestHandler):
 
     @property
     def db(self):
-        pass
-        #  return self.application.db
+        return self.application.db
+
 
 class RegisterHandler(BaseHandler):
 
+    #test api
     def get(self):
         self.write("You get this message")
 
     def post(self):
         _user = self.get_argument("user")
-        _pass = self.get_argument("pass")
+        _pass = self.get_argument("password")
+        _course = self.get_argument("course")
+        _sex = self.get_argument("sex")
+        try:
+            self.db.execute("INSERT INTO user VALUES(NULL,'{}','{}','{}','{}');".format(_user,_pass,_course,_sex))
+        except Exception, e:
+            if tuple(e)[0] == 1062:
+                self.write({"id":2,u"information":u"用户名不能重复"})
+
+
 
 class LoginHandler(BaseHandler):
 

@@ -39,7 +39,7 @@ class Application(tornado.web.Application):
             "debug":True,
         }
         super(Application, self).__init__(handlers, **settings)
-        self.db = torndb.Connection(options.host,options.dbname,options.user,options.password)
+        self.db = torndb.Connection(options.host, options.dbname, options.user, options.password)
 
 
 def main():
