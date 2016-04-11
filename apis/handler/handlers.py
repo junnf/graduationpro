@@ -47,10 +47,9 @@ class LoginHandler(BaseHandler):
         #use rsa
         _t = md5.md5(_pass)
         token = _t.hexdigest()
-        #  with open("data/token.txt","w+") as f:
-            #  f.write(token)
         _dic[token] = _user
         self.write({"id":1,"information":"{}".format(token)})
+
 
 class TableHandler(BaseHandler):
 
