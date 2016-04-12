@@ -33,9 +33,10 @@ class RegisterHandler(BaseHandler):
         _sex = self.get_argument("sex")
         try:
             self.db.execute("INSERT INTO user VALUES(NULL,'{}','{}','{}','{}');".format(_user,_pass,_course,_sex))
+            self.write({"code":0,"information":"Register Successful"})
         except Exception, e:
             if tuple(e)[0] == 1062:
-                self.write({"id":2,"information":"用户名不能重复"})
+                self.write({"code":2,"information":"用户名不能重复"})
 
 
 class CheckHandler(BaseHandler):
@@ -49,6 +50,8 @@ class CheckHandler(BaseHandler):
         #self.write("{'check':'{0}'}".format(_dic.get(_token,'not found')))
         if _dic.has_key(_token):
             self.write('{"code":"0"}')
+        else:
+            self.write('{"code":"1"}')
 
 
 class LoginHandler(BaseHandler):
