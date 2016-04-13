@@ -63,7 +63,7 @@ class LoginHandler(BaseHandler):
         _t = md5.md5(_pass)
         token = _t.hexdigest()
         _dic[token] = _user
-        self.write({"id":1,"information":"{}".format(token)})
+        self.write({"id":0,"information":"{}".format(token)})
 
 
 class TableHandler(BaseHandler):
