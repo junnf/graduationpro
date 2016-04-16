@@ -10,7 +10,6 @@ User_student
 Class_table
 {
     (course_id, week_num, week_day, time) MK
-
     course_id:int xxaabbb not null;
     week_num:int n not null;
     week_day:int 0-6 not null;
@@ -39,6 +38,15 @@ User_dep
     dep_num:xxxcc;
     }
 
+Teacher
+{
+    teacher_num: MK not null ;
+    name:varchar(30) not null;
+    sexuality:int 0,1 0:female 1:male not null;
+    tel:int(12) not null;
+    email:char(25);
+    major:varchar(75);
+    }
 
 Class
     {

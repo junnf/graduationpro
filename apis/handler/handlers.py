@@ -9,6 +9,8 @@ import traceback
 import torndb
 
 _dic = {}
+_dep_dic = {}
+_tea_dic = {}
 
 class BaseHandler(tornado.web.RequestHandler):
 
@@ -27,6 +29,8 @@ class RegisterHandler(BaseHandler):
         self.write("You get this message")
 
     def post(self):
+        #test identity
+        #get self.get_argument("identity")
         _user = self.get_argument("user")
         _pass = self.get_argument("password")
         _course = self.get_argument("course")
@@ -64,6 +68,37 @@ class LoginHandler(BaseHandler):
         token = _t.hexdigest()
         _dic[token] = _user
         self.write({"id":0,"information":"{}".format(token)})
+
+
+#  class CheckDepHandler(BaseHandler):
+
+    #  def post(self):
+        #  """
+         #  {'check':'not found'}
+        #  """
+        #  _token = self.get_argument("token")
+        #  #self.write("{'check','{}'}".format(_dic.get(_token,'not found')))
+        #  #self.write("{'check':'{0}'}".format(_dic.get(_token,'not found')))
+        #  if _dic.has_key(_token):
+            #  self.write('{"code":"0"}')
+        #  else:
+            #  pass
+
+class CourseDepHandler(BaseHandler):
+    #教务处使用
+    def post(self):
+        _token = self.get_argument("token")
+        if _dep_dic.has_key(_token):
+            _course_name = self.get_argument("course_name")
+            _teacher_num = self.get_argument("teacher_num")
+            _detail = self.get_argument("detail")
+            try:
+                self.db.execute("INSERT INTO class VALUES(NULL,'{}','{}','{}');".format(_course_name, _teacher_num, _detail))
+                self.write({"code":0,"information":"Add Course Successful"})
+            except Exception, e:
+                self.write('{"code":1,"information":"Add Course Fail!"}')
+        else:
+            self.write('{"code":2,"information":"Check identity Fail!"}')
 
 
 class TableHandler(BaseHandler):
