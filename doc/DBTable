@@ -1,49 +1,53 @@
 User_student
     {
-        id:int
-        name:varchar() unique
-        passwd:MD5()
+        id:int MK AUTO_INCREMENT
+        name:varchar() unique not null
+        passwd:MD5() not null
         sexuality:int  0,1 0:female 1:male
-        #course_id:int() 10--xxaaa 学生11 00 00 000 教务处 12 --xxx 教师编号 分别为9,9,7位数字
         course_id:xxaabbb 可以为空   FK
-        #identity:0,1,2 0学生，1教师，2教务处
     }
 
 Class_table
 {
-    
+    (course_id, week_num, week_day, time) MK
+
+    course_id:int xxaabbb not null;
+    week_num:int n not null;
+    week_day:int 0-6 not null;
+    time:1,2,3,4,5,6 not null;
+    location:varchar() not null;
+    class_id: Class(id) FK not null;
+
     }
 
 User_teacher
     {
-        id:int
+        id:int MK AUTO_INCREMENT
         name:varchar()
         passwd:MD5()
         sexuality:int  0,1 0:female 1:male
-        teacher_num: xxxaaaa  #院系，教师编号
-        #identity:0,1,2 0学生，1教师，2教务处
+        teacher_num: xxxaaaa  #院系，教师编号UNIQUE_KEY
     }
+
 
 User_dep
 {
-    id:int
-    name:varchar()
-    passwd:MD5()
+    id:int MK AUTO_INCREMENT
+    name:varchar() not null
+    passwd:MD5() not null
+    sexuality:int  0,1 0:female 1:male
+    dep_num:xxxcc;
     }
-
 
 
 Class
     {
-        id: MK
-        course_name:
-        teacher_id:
+        id:int MK AUTO_INCREMENT
+        course_name:varchar(50) not null;
+        teacher_num:xxxaaaa not null;
+        detail:varchar(100);
     }
 
-//Record
-//    {
-//        
-//        }
 
 
 
