@@ -1,27 +1,43 @@
-User
+User_student
+    {
+        id:int
+        name:varchar() unique
+        passwd:MD5()
+        sexuality:int  0,1 0:female 1:male
+        #course_id:int() 10--xxaaa 学生11 00 00 000 教务处 12 --xxx 教师编号 分别为9,9,7位数字
+        course_id:xxaabbb 可以为空   FK
+        #identity:0,1,2 0学生，1教师，2教务处
+    }
+
+Class_table
+{
+    
+    }
+
+User_teacher
     {
         id:int
         name:varchar()
         passwd:MD5()
-        profession_id:int Foreign_Key
         sexuality:int  0,1 0:female 1:male
-        grade:int 1,2,3,4
-        class:int
-        tel:int
-        old:int
+        teacher_num: xxxaaaa  #院系，教师编号
+        #identity:0,1,2 0学生，1教师，2教务处
     }
+
+User_dep
+{
+    id:int
+    name:varchar()
+    passwd:MD5()
+    }
+
 
 
 Class
     {
-        profession_id:int
-        grade:int
-        class:int
-        date:date
-        course_name:varchar()
-        course_num:int()1,2 morning 3,4 afternoon 5,6 evening
-        teacher_id:int()
-        extra:varchar() //other information
+        id: MK
+        course_name:
+        teacher_id:
     }
 
 //Record
