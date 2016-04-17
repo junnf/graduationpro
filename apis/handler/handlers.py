@@ -12,6 +12,7 @@ _dic = {}
 _dep_dic = {}
 _tea_dic = {}
 
+
 class BaseHandler(tornado.web.RequestHandler):
 
     def get_current_user(self):
@@ -20,6 +21,7 @@ class BaseHandler(tornado.web.RequestHandler):
     @property
     def db(self):
         return self.application.db
+
 
 
 class RegisterHandler(BaseHandler):
@@ -70,21 +72,8 @@ class LoginHandler(BaseHandler):
         self.write({"id":0,"information":"{}".format(token)})
 
 
-#  class CheckDepHandler(BaseHandler):
-
-    #  def post(self):
-        #  """
-         #  {'check':'not found'}
-        #  """
-        #  _token = self.get_argument("token")
-        #  #self.write("{'check','{}'}".format(_dic.get(_token,'not found')))
-        #  #self.write("{'check':'{0}'}".format(_dic.get(_token,'not found')))
-        #  if _dic.has_key(_token):
-            #  self.write('{"code":"0"}')
-        #  else:
-            #  pass
-
 class CourseDepHandler(BaseHandler):
+
     #教务处使用
     def post(self):
         _token = self.get_argument("token")
@@ -101,37 +90,54 @@ class CourseDepHandler(BaseHandler):
             self.write('{"code":2,"information":"Check identity Fail!"}')
 
 
-class TableHandler(BaseHandler):
+class TeacherHandler(BaseHandler):
 
-    def get(self,input):
-        _temp = _dic.get(input,"")
-        if _temp == "":
-            self.write({"id":0,"information":"token is fault or not exist"})
+    def check_teacher(self):
+        if _tea_dic.has_key("token"):
+            return True
+        else:
+            return False
+
+
+class StudentHandler(BaseHandler):
+
+    def check_student(token):
+        if _dic.has_key("token"):
+            return True
+        else:
+            return False
+
+
+class StudentPasswdHandler(StudentHandler):
+    pass
+
+
+class StudentGetCourse(StudentHandler):
+    pass
+
+
+class StudentInfoHandler(StudentHandler):
 
     def post(self):
-        """
-            get class information use json
-            0-6 weekday
-            1-6 coursenum
-            {
-                "id":1,
-                "data":{
-                    "0":{
-                       "1":{
-                             "coursename":"xxx",
-                             "courseid":int,
-                             "teacher":"abc",
-                             "extra":"是否存在其他课程"
-                           }
-                        }
-                       }
-            }
-        """
-        pass
+        #student personal info edit
+        _token = self.get_argument("token")
+        if self.check_student(_token):
+            _sex = self.get_argument("sex")
+            _course_id = self.get_argument("course_id")
+            _student_code = self.get_argument("student_code")
+            try:
+                pass
+                #修改个人信息
+                #self.db.excute("")
+            except Exception, e:
+                self.write('{"code":2,"information":"Edit Information Fail!"}')
 
-
-
-
+    def get(self):
+        ##Get Student Info
+        _name = self.get_argument("name")
+        _sex = self.get_argument("sex")
+        _course_id = self.get_argument("course_id")
+        _student_code = self.get_argument("student_code")
 
 
 
