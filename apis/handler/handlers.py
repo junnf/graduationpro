@@ -92,8 +92,8 @@ class CourseDepHandler(BaseHandler):
 
 class TeacherHandler(BaseHandler):
 
-    def check_teacher(self):
-        if _tea_dic.has_key("token"):
+    def check_teacher(self, token):
+        if _tea_dic.has_key(token):
             return True
         else:
             return False
@@ -101,15 +101,28 @@ class TeacherHandler(BaseHandler):
 
 class StudentHandler(BaseHandler):
 
-    def check_student(token):
-        if _dic.has_key("token"):
+    def check_student(self, token):
+        if _dic.has_key(token):
             return True
         else:
             return False
 
 
 class StudentPasswdHandler(StudentHandler):
-    pass
+
+    def check_student(self, token):
+        if _dic.has_key(token):
+            return _dic[token]
+        else:
+            return None
+
+    def post(self):
+        _token = self.get_argument("token")
+        _get = self.check_student(_token)
+        if _get == None:
+            self.write(
+                    json.dumps({"code":"2","information":"Please Login First!"})
+                    )
 
 
 class StudentGetCourse(StudentHandler):
@@ -130,7 +143,12 @@ class StudentInfoHandler(StudentHandler):
                 #修改个人信息
                 #self.db.excute("")
             except Exception, e:
-                self.write('{"code":2,"information":"Edit Information Fail!"}')
+                self.write('{"code":3,"information":"Edit Information Fail!"}')
+        else:
+            #Login Fail
+            self.write(
+                    json.dumps({"code":"2","information":"Please Login First!"})
+                    )
 
     def get(self):
         ##Get Student Info
