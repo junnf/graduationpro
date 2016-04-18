@@ -83,11 +83,17 @@ class CourseDepHandler(BaseHandler):
             _detail = self.get_argument("detail")
             try:
                 self.db.execute("INSERT INTO class VALUES(NULL,'{}','{}','{}');".format(_course_name, _teacher_num, _detail))
-                self.write({"code":0,"information":"Add Course Successful"})
+                self.write(
+                        json.dumps({"code":0,"information":"Add Course Successful"})
+                        )
             except Exception, e:
-                self.write('{"code":1,"information":"Add Course Fail!"}')
+                self.write(
+                        json.dumps({"code":1,"information":"Add Course Fail!"})
+                        )
         else:
-            self.write('{"code":2,"information":"Check identity Fail!"}')
+            self.write(
+                    json.dumps({"code":2,"information":"Check identity Fail!"})
+                    )
 
 
 class TeacherHandler(BaseHandler):
@@ -135,6 +141,8 @@ class StudentInfoHandler(StudentHandler):
         #student personal info edit
         _token = self.get_argument("token")
         if self.check_student(_token):
+            _user = _dic[_token]
+            #_user 用来在SQL语句中的WHERE条件中起到作用
             _sex = self.get_argument("sex")
             _course_id = self.get_argument("course_id")
             _student_code = self.get_argument("student_code")
@@ -143,20 +151,29 @@ class StudentInfoHandler(StudentHandler):
                 #修改个人信息
                 #self.db.excute("")
             except Exception, e:
-                self.write('{"code":3,"information":"Edit Information Fail!"}')
+                self.write(
+                        json.dumps({"code":3,"information":"Edit Information Fail!"})
+                        )
         else:
             #Login Fail
             self.write(
                     json.dumps({"code":"2","information":"Please Login First!"})
                     )
 
-    def get(self):
+    def get(self, token):
         ##Get Student Info
-        _name = self.get_argument("name")
-        _sex = self.get_argument("sex")
-        _course_id = self.get_argument("course_id")
-        _student_code = self.get_argument("student_code")
-
-
+        if self.check_student(token):
+            _user = _dic[token]
+            try:
+                #execute query SQL
+                pass
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":4,"information":"Query Fail"})
+                        )
+        else:
+            self.write(
+                    json.dumps({"code":"2","information":"Please Login First!"})
+                    )
 
 
