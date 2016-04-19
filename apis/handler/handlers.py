@@ -151,12 +151,31 @@ class StudentPasswdHandler(StudentHandler):
                     )
 
 
-class StudentGetCourse(StudentHandler):
+class StudentGetCourseTableHandler(StudentHandler):
+    """
+
+    """
 
     def post(self):
-        self.get_argument("")
+        _course_id = self.get_argument("course_id")
+        _week_num = self.get_argument("week_num")
+        try:
+            _get = self.db.query("select class_name,location,week_day,time \
+                    from class a NATURAL JOIN class_table b where week_num \
+                    = '{}' and course_id = '{}';".format(_course_id, _week_num))
+        except Exception, e:
+            self.write(
+                    json.dumps({"code":2,"information":"未知错误"})
+                    )
 
-class SearchCourse(BaseHandler):
+
+
+class SearchCourseHandler(BaseHandler):
+    """
+        code 0 get class_info
+        code 1 class not exists
+        code 2 error
+    """
     def post(self):
         _class_id = self.get_argument("class_id")
         try:
@@ -180,7 +199,7 @@ class SearchCourse(BaseHandler):
                         )
         except Exception ,e:
             self.write(json.dumps(
-                {"code":1,"information":"未知错误"})
+                {"code":2,"information":"未知错误"})
                     )
 
 class StudentInfoHandler(StudentHandler):
@@ -223,5 +242,4 @@ class StudentInfoHandler(StudentHandler):
             self.write(
                     json.dumps({"code":"2","information":"Please Login First!"})
                     )
-
 
