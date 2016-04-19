@@ -10,7 +10,7 @@ import torndb
 
 _dic = {}
 _dep_dic = {}
-_tea_dic = {}
+#  _tea_dic = {}
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -33,19 +33,23 @@ class RegisterHandler(BaseHandler):
     def post(self):
         #test identity
         #get self.get_argument("identity")
+        _uid = self.get_argument("uid")
         _user = self.get_argument("user")
         _pass = self.get_argument("password")
         _course = self.get_argument("course")
         _sex = self.get_argument("sex")
         try:
-            self.db.execute("INSERT INTO user VALUES(NULL,'{}','{}','{}','{}');".format(_user,_pass,_course,_sex))
+            self.db.execute("INSERT INTO user VALUES('{}','{}','MD5({})','{}','{}');".format(_uid,_user,_pass,_sex,_course))
             self.write({"code":0,"information":"Register Successful"})
         except Exception, e:
             if tuple(e)[0] == 1062:
-                self.write({"code":2,"information":"用户名不能重复"})
+                self.write({"code":2,"information":"用户名或学号不能重复"})
 
 
 class CheckHandler(BaseHandler):
+    """
+        get method check
+    """
 
     def post(self):
         """
@@ -61,15 +65,40 @@ class CheckHandler(BaseHandler):
 
 
 class LoginHandler(BaseHandler):
+    """
+    code 0 成功
+    code 1 密码错误
+    code 2 未知错误
+    code 3 不存在该用户
+    """
 
     def post(self):
         _user = self.get_argument("user")
         _pass = self.get_argument("password")
         #use rsa
-        _t = md5.md5(_pass)
-        token = _t.hexdigest()
-        _dic[token] = _user
-        self.write({"id":0,"information":"{}".format(token)})
+        try:
+            _get = self.db.query("SELECT passwd FROM user_student WHERE name = '{}';".format(_user))
+            _passmd5 = self.db.query("SELECT MD5({});".format(_pass))
+            if _get == []:
+                self.write(json.dumps({"code":3,"information":"不存在该用户"}))
+                return
+            else:
+                _get_paswdmd5 = _get[0]['passwd']
+                if _get_paswdmd5 == _passmd5:
+                    _t = md5.md5(_pass)
+                    token = _t.hexdigest()
+                    _dic[token] = _user
+                    self.write(
+                            json.dumps({"code":0,"information":"{}".format(token)})
+                            )
+                else:
+                    self.write(
+                            json.dumps({"code":1,"information":"密码错误"})
+                            )
+        except Exception, e:
+                self.write(
+                        json.dumps({"code":2,"information":"存在未知的错误"})
+                        )
 
 
 class CourseDepHandler(BaseHandler):
@@ -94,15 +123,6 @@ class CourseDepHandler(BaseHandler):
             self.write(
                     json.dumps({"code":2,"information":"Check identity Fail!"})
                     )
-
-
-class TeacherHandler(BaseHandler):
-
-    def check_teacher(self, token):
-        if _tea_dic.has_key(token):
-            return True
-        else:
-            return False
 
 
 class StudentHandler(BaseHandler):
@@ -132,8 +152,36 @@ class StudentPasswdHandler(StudentHandler):
 
 
 class StudentGetCourse(StudentHandler):
-    pass
 
+    def post(self):
+        self.get_argument("")
+
+class SearchCourse(BaseHandler):
+    def post(self):
+        _class_id = self.get_argument("class_id")
+        try:
+            _get = self.db.query("SELECT * FROM class WHERE class_id = '{}'".format(_class_id))
+            if _get == []:
+                self.write(
+                        json.dumps({"code":1,"information":"课程号不存在"})
+                        )
+                return
+            else:
+                return_json = {
+                        "code":0,
+                        "information":
+                                {
+                                    "class_id":_get[0]['class_id'] , "class_name": _get[0]['class_name'],
+                                    "teacher_name":_get[0]['teacher_name'] , "other":_get[0]['other']
+                                }
+                            }
+                self.write(
+                        json.dumps(return_json)
+                        )
+        except Exception ,e:
+            self.write(json.dumps(
+                {"code":1,"information":"未知错误"})
+                    )
 
 class StudentInfoHandler(StudentHandler):
 
