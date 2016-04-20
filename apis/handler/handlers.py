@@ -102,8 +102,10 @@ class LoginHandler(BaseHandler):
 
 
 class CoursedelDepHandler(BaseHandler):
+    """
+        教务处使用，删除课程信息
+    """
 
-    #教务处使用
     def post(self):
         _token = self.get_argument("token")
         _class_id = self.get_argument("class_id")
@@ -125,8 +127,9 @@ class CoursedelDepHandler(BaseHandler):
 
 
 class CourseaddDepHandler(BaseHandler):
-
-    #教务处使用
+    """
+        教务处使用，增加课程信息
+    """
     def post(self):
         _token = self.get_argument("token")
         if _dep_dic.has_key(_token):
@@ -138,6 +141,35 @@ class CourseaddDepHandler(BaseHandler):
                 self.write(
                         json.dumps({"code":0,"information":"Add Course Successful"})
                         )
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":1,"information":"Add Course Fail!"})
+                        )
+        else:
+            self.write(
+                    json.dumps({"code":2,"information":"Check identity Fail!"})
+                    )
+
+class CourseeditDepHandler(BaseHandler):
+    """
+        教务处使用，修改课程信息
+    """
+
+    def post(self):
+        """
+            根据class_id修改课程信息
+        """
+        _token = self.get_argument("token")
+        if _dep_dic.has_key(_token):
+            _class_id = self.get_argument("class_id")
+            _class_name = self.get_argument("class_name")
+            _teacher_name = self.get_argument("teacher_name")
+            _other = self.get_argument("other")
+            try:
+                self.db.execute("UPDATE class SET class_name = '{}', \
+                        teacher_name = '{}',other = '{}' WHERE  \
+                        class_id = {};".format(_class_name, _teacher_name, _other,_class_id))
+
             except Exception, e:
                 self.write(
                         json.dumps({"code":1,"information":"Add Course Fail!"})
@@ -242,7 +274,12 @@ class SearchCourseHandler(BaseHandler):
                     json.dumps({"code":2,"information":"未知错误"})
                     )
 
+
 class StudentInfoHandler(StudentHandler):
+    """
+        学生用户得到个人信息，修改个人信息
+
+    """
 
     def post(self):
         #student personal info edit
