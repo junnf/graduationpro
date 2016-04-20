@@ -101,7 +101,30 @@ class LoginHandler(BaseHandler):
                         )
 
 
-class CourseDepHandler(BaseHandler):
+class CoursedelDepHandler(BaseHandler):
+
+    #教务处使用
+    def post(self):
+        _token = self.get_argument("token")
+        _class_id = self.get_argument("class_id")
+        if _dep_dic.has_key(_token):
+            try:
+                self.db.execute("DELETE FROM class WHERE class_id = {};".format(_class_id))
+                self.db.execute("DELETE FROM class_table WHERE class_id = {};".format(_class_id))
+                self.write(
+                        json.dumps({"code":0,"information":"Delete Course Successful"})
+                        )
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":1,"information":"Delete Course Fail!"})
+                        )
+        else:
+            self.write(
+                    json.dumps({"code":2,"information":"Check identity Fail!"})
+                    )
+
+
+class CourseaddDepHandler(BaseHandler):
 
     #教务处使用
     def post(self):
@@ -134,7 +157,10 @@ class StudentHandler(BaseHandler):
             return False
 
 
-class StudentPasswdHandler(StudentHandler):
+class StudentPasswdeditHandler(StudentHandler):
+    """
+        学生修改密码
+    """
 
     def check_student(self, token):
         if _dic.has_key(token):
@@ -144,16 +170,25 @@ class StudentPasswdHandler(StudentHandler):
 
     def post(self):
         _token = self.get_argument("token")
+        _passwd = self.get_argument("passwd")
         _get = self.check_student(_token)
         if _get == None:
             self.write(
                     json.dumps({"code":"2","information":"Please Login First!"})
                     )
+        else:
+            try:
+                self.db.execute("UPDATE user_student set \
+                        passwd = MD5('{}') where name = '{}'".format(_passwd,_dic[_token]))
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":"1","information":"修改密码失败"})
+                        )
 
 
 class StudentGetCourseTableHandler(StudentHandler):
     """
-
+        得到教务处课表信息
     """
 
     def post(self):
@@ -173,7 +208,6 @@ class StudentGetCourseTableHandler(StudentHandler):
             self.write(
                     json.dumps({"code":2,"information":"未知错误"})
                     )
-
 
 
 class SearchCourseHandler(BaseHandler):
@@ -220,17 +254,20 @@ class StudentInfoHandler(StudentHandler):
             _course_id = self.get_argument("course_id")
             _student_code = self.get_argument("student_code")
             try:
-                pass
                 #修改个人信息
-                #self.db.excute("")
+                self.db.execute("UPDATE user_student SET sexuality = {}, \
+                        course_id = {}, uid = {} where name = '{}'".format(_sex,_course_id,_student_code,_user))
+                self.write(
+                        json.dumps({"code":0,"information":"修改信息成功"})
+                        )
             except Exception, e:
                 self.write(
-                        json.dumps({"code":3,"information":"Edit Information Fail!"})
+                        json.dumps({"code":3,"information":"修改信息失败"})
                         )
         else:
             #Login Fail
             self.write(
-                    json.dumps({"code":"2","information":"Please Login First!"})
+                    json.dumps({"code":"2","information":"验证超时,请先登录"})
                     )
 
     def get(self, token):
@@ -238,8 +275,11 @@ class StudentInfoHandler(StudentHandler):
         if self.check_student(token):
             _user = _dic[token]
             try:
-                #execute query SQL
-                pass
+                _get = self.db.query("SELECT uid,name,sexuality,course_id from user_student where name = '{}'".format(_user))
+                if len(_get) > 0:
+                    self.write(
+                        json.dumps({"code":0,"information":_get[0]})
+                        )
             except Exception, e:
                 self.write(
                         json.dumps({"code":4,"information":"Query Fail"})
