@@ -31,6 +31,8 @@ class Application(tornado.web.Application):
                (r'/register',RegisterHandler),
                (r'/login',LoginHandler),
                (r'/check',CheckHandler),
+               (r'/table',StudentGetCourseTableHandler),
+               (r'/searcourse',SearchCourseHandler),
                 ]
         settings = {
             "cookie_secret":"d2oEZ8T3TOqr1vhqDK2iIEilDgJ9OUO9lWyA+fGJ7tA=",
