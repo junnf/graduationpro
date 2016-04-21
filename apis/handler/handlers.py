@@ -88,17 +88,14 @@ class LoginHandler(BaseHandler):
                     _t = md5.md5(_pass)
                     token = _t.hexdigest()
                     _dic[token] = _user
-		    print 000
                     self.write(
                             json.dumps({"code":0,"information":"{}".format(token)})
                             )
                 else:
-		    print 111
                     self.write(
                             json.dumps({"code":1,"information":"密码错误"})
                             )
         except Exception, e:
-	        print 4
                 self.write(
                         json.dumps({"code":2,"information":"存在未知的错误"})
                         )
