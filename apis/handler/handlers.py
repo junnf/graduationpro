@@ -77,7 +77,6 @@ class LoginHandler(BaseHandler):
         _pass = self.get_argument("password")
         try:
             _get = self.db.query("SELECT passwd FROM user_student WHERE name = '{}';".format(_user))
-	    print _get
             _passmd5 = self.db.query("SELECT MD5('{}');".format(_pass))
             if _get == []:
                 self.write(json.dumps({"code":3,"information":"不存在该用户"}))
