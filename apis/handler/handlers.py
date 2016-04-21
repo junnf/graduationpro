@@ -314,8 +314,9 @@ class StudentInfoHandler(StudentHandler):
             try:
                 _get = self.db.query("SELECT uid,name,sexuality,course_id from user_student where name = '{}'".format(_user))
                 if len(_get) > 0:
+		    print _get
                     self.write(
-                        json.dumps({"code":0,"information":_get[0]})
+                        json.dumps({"code":0,"information":_get[0]['uid']})
                         )
             except Exception, e:
                 self.write(
