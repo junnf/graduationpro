@@ -316,7 +316,10 @@ class StudentInfoHandler(StudentHandler):
                 if len(_get) > 0:
 		    print _get
                     self.write(
-                        json.dumps({"code":0,"information":_get[0]['uid']})
+			    json.dumps({"code":0,"information":{"uid":_get[0]['uid'],
+				"name":_get[0]['name'],
+				"sexuality":_get[0]['sexuality'],
+				"course_id":_get[0]['course_id']}})
                         )
             except Exception, e:
                 self.write(
