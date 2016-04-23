@@ -284,12 +284,14 @@ class StudentInfoHandler(StudentHandler):
     def post(self):
         #student personal info edit
         _token = self.get_argument("token")
+       #_user 用来在SQL语句中的WHERE条件中起到作用
+        _sex = self.get_argument("sex")
+        _course_id = self.get_argument("course_id")
+        _student_code = self.get_argument("student_code")
+
         if self.check_student(_token):
             _user = _dic[_token]
             #_user 用来在SQL语句中的WHERE条件中起到作用
-            _sex = self.get_argument("sex")
-            _course_id = self.get_argument("course_id")
-            _student_code = self.get_argument("student_code")
             try:
                 #修改个人信息
                 self.db.execute("UPDATE user_student SET sexuality = {}, \
