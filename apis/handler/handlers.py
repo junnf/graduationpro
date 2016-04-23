@@ -91,6 +91,7 @@ class LoginHandler(BaseHandler):
                         token = _t.hexdigest()
                         _dic[token] = _user
                         #json_code 10 学生信息
+	    		print "xuesheng"
                         self.write(
                             json.dumps({"code":10,"information":"{}".format(token)})
                             )
@@ -115,6 +116,7 @@ class LoginHandler(BaseHandler):
                         _t = md5.md5(_pass)
                         token = _t.hexdigest()
                         _dep_dic[token] = _user
+	    		print "jiaowuchu"
                         self.write(
                             json.dumps({"code":11,"information":"{}".format(token)})
                             )
