@@ -75,27 +75,54 @@ class LoginHandler(BaseHandler):
     def post(self):
         _user = self.get_argument("user")
         _pass = self.get_argument("password")
-        try:
-            _get = self.db.query("SELECT passwd FROM user_student WHERE name = '{}';".format(_user))
-            _passmd5 = self.db.query("SELECT MD5('{}');".format(_pass))
-            if _get == []:
-                self.write(json.dumps({"code":3,"information":"不存在该用户"}))
-                return
-            else:
-                _get_paswdmd5 = _get[0]['passwd']
-		print _get_paswdmd5,_passmd5[0].values()
-                if _get_paswdmd5 == _passmd5[0].values()[0]:
-                    _t = md5.md5(_pass)
-                    token = _t.hexdigest()
-                    _dic[token] = _user
-                    self.write(
-                            json.dumps({"code":0,"information":"{}".format(token)})
-                            )
+        _ty = self.get_argument("ty")
+        print type(_ty)
+        if _ty == "0":
+            try:
+                _get = self.db.query("SELECT passwd FROM user_student WHERE name = '{}';".format(_user))
+                _passmd5 = self.db.query("SELECT MD5('{}');".format(_pass))
+                if _get == []:
+                    self.write(json.dumps({"code":3,"information":"不存在该用户"}))
+                    return
                 else:
-                    self.write(
+                    _get_paswdmd5 = _get[0]['passwd']
+                    if _get_paswdmd5 == _passmd5[0].values()[0]:
+                        _t = md5.md5(_pass)
+                        token = _t.hexdigest()
+                        _dic[token] = _user
+                        #json_code 10 学生信息
+                        self.write(
+                            json.dumps({"code":10,"information":"{}".format(token)})
+                            )
+                    else:
+                        self.write(
                             json.dumps({"code":1,"information":"密码错误"})
                             )
-        except Exception, e:
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":2,"information":"存在未知的错误"})
+                        )
+        elif _ty == "1":
+            try:
+                _get = self.db.query("SELECT passwd FROM user_dep WHERE name = '{}';".format(_user))
+                _passmd5 = self.db.query("SELECT MD5('{}');".format(_pass))
+                if _get == []:
+                    self.write(json.dumps({"code":3,"information":"不存在该用户"}))
+                    return
+                else:
+                    _get_paswdmd5 = _get[0]['passwd']
+                    if _get_paswdmd5 == _passmd5[0].values()[0]:
+                        _t = md5.md5(_pass)
+                        token = _t.hexdigest()
+                        _dep_dic[token] = _user
+                        self.write(
+                            json.dumps({"code":11,"information":"{}".format(token)})
+                            )
+                    else:
+                        self.write(
+                            json.dumps({"code":1,"information":"密码错误"})
+                            )
+            except Exception, e:
                 self.write(
                         json.dumps({"code":2,"information":"存在未知的错误"})
                         )
