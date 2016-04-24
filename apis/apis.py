@@ -30,7 +30,8 @@ class Application(tornado.web.Application):
         handlers = [
                (r'/register',RegisterHandler),
                (r'/login',LoginHandler),
-               (r'/check',CheckHandler),
+               (r'/check',CheckStuHandler),
+               (r'/checkdep',CheckDepHandler),
                (r'/gettable',StudentGetCourseTableHandler),
                (r'/searcourse',SearchCourseHandler),
                (r'/dep/addcourse',CourseaddDepHandler),
