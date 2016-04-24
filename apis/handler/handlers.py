@@ -46,7 +46,7 @@ class RegisterHandler(BaseHandler):
                 self.write({"code":2,"information":"用户名或学号不能重复"})
 
 
-class CheckHandler(BaseHandler):
+class CheckStuHandler(BaseHandler):
     """
         get method check
     """
@@ -56,12 +56,19 @@ class CheckHandler(BaseHandler):
          {'check':'not found'}
         """
         _token = self.get_argument("token")
-        #self.write("{'check','{}'}".format(_dic.get(_token,'not found')))
-        #self.write("{'check':'{0}'}".format(_dic.get(_token,'not found')))
         if _dic.has_key(_token):
             self.write('{"code":"0"}')
         else:
             self.write('{"code":"1"}')
+
+class CheckDepHandler(BaseHandler):
+    def post(self):
+        _token = self.get_argument("token")
+        if _dep_dic.has_key(_token):
+            self.write('{"code":"0"}')
+        else:
+            self.write('{"code":"1"}')
+
 
 
 class LoginHandler(BaseHandler):
