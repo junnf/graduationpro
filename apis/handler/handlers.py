@@ -167,12 +167,16 @@ class CourseaddDepHandler(BaseHandler):
     def post(self):
         _token = self.get_argument("token")
         if _dep_dic.has_key(_token):
-            _course_name = self.get_argument("course_name")
-            _teacher_num = self.get_argument("teacher_num")
-            _detail = self.get_argument("detail")
+            _course_name = self.get_argument("course_name").encode("utf-8")
+            _teacher_num = self.get_argument("teacher_name").encode("utf-8")
+	    print type(_teacher_num)
+            _detail = self.get_argument("detail").decode("utf-8")
+	    _course_id = self.get_argument("course_id")
             try:
-                self.db.execute("INSERT INTO class VALUES(NULL,'{}','{}','{}');".format(_course_name, _teacher_num, _detail))
-                self.write(
+		
+                self.db.execute("INSERT INTO class VALUES({},'{}','{}','{}');".format(_course_id,_course_name, _teacher_num, _detail))
+                print "aa"
+		self.write(
                         json.dumps({"code":0,"information":"Add Course Successful"})
                         )
             except Exception, e:
@@ -296,8 +300,8 @@ class SearchCourseHandler(BaseHandler):
                         "code":0,
                         "information":
                                 {
-                                    "class_id":_get[0]['class_id'] , "class_name": _get[0]['class_name'],
-                                    "teacher_name":_get[0]['teacher_name'] , "other":_get[0]['other']
+                                    "class_id":_get[0]['class_id'], "class_name": _get[0]['class_name'].decode('utf-8'),
+                                    "teacher_name":_get[0]['teacher_name'].decode('utf-8') , "other":_get[0]['other'].decode('utf-8')
                                 }
                             }
                 self.write(
