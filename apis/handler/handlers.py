@@ -371,10 +371,39 @@ class StudentInfoHandler(StudentHandler):
                     json.dumps({"code":"2","information":"Please Login First!"})
                     )
 
+
+class AddCourseTableHandler(StudentHandler):
+    """
+        添加课表信息
+    """
+
+    def post(self):
+        _course_id = self.get_argument("course_id")
+        _week_num = self.get_argument("week_num")
+        #  m = {}
+        try:
+            _get = self.db.query("select class_name, location, week_day, time \
+                    from class a NATURAL JOIN class_table b WHERE week_num = {} \
+                    AND course_id = {} ".format(_week_num,_course_id))
+            if _get == []:
+                self.write(json.dumps({"code":"1","information":"Table is null"}))
+            #  if len(_get) > 0:
+                #  for x in _get:
+                    #  m[(str(x['week_day'])+str(x['time']))] = x
+            self.write(json.dumps({"code":"0","information": _get}))
+
+        except Exception, e:
+            self.write(
+                    json.dumps({"code":"2","information":"未知错误"})
+                    )
+
+
 class TestHandler(BaseHandler):
-    def get(self):
+    def post(self):
+        course_name = self.get_argument("course_name")
+        print "test"
         self.write(
-                json.dumps({"code":"2","information":"验证超时,请先登录"})
+                json.dumps({"code":"2","information":course_name})
                 )
 
 class TestCourseaddDepHandler(BaseHandler):

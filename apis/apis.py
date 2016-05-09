@@ -36,6 +36,7 @@ class Application(tornado.web.Application):
                (r'/searchcourse',SearchCourseHandler),
                (r'/dep/addcourse',CourseaddDepHandler),
                (r'/dep/delcourse',CoursedelDepHandler),
+               #  (r'/dep/addtable',),
                (r'/passwd',StudentPasswdeditHandler),
                (r'/student/info/(\w+)',StudentInfoHandler),
                (r'/student/editinfo',StudentInfoHandler),
