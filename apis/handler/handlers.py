@@ -376,6 +376,7 @@ class TestHandler(BaseHandler):
         self.write(
                 json.dumps({"code":"2","information":"验证超时,请先登录"})
                 )
+
 class TestCourseaddDepHandler(BaseHandler):
     """
         教务处使用，增加课程信息
