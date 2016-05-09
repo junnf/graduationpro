@@ -39,7 +39,8 @@ class Application(tornado.web.Application):
                (r'/passwd',StudentPasswdeditHandler),
                (r'/student/info/(\w+)',StudentInfoHandler),
                (r'/student/editinfo',StudentInfoHandler),
-               (r'/testcharset',TestHandler)
+               (r'/testcharset',TestHandler),
+	       (r'/test',TestCourseaddDepHandler),
 
                 ]
         settings = {

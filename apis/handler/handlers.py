@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
-
+#decoding:utf-8
 import tornado.web
 import modle
 import ujson as json
@@ -167,19 +166,20 @@ class CourseaddDepHandler(BaseHandler):
     def post(self):
         _token = self.get_argument("token")
         if _dep_dic.has_key(_token):
-            _course_name = self.get_argument("course_name").encode("utf-8")
-            _teacher_num = self.get_argument("teacher_name").encode("utf-8")
-	    print type(_teacher_num)
-            _detail = self.get_argument("detail").decode("utf-8")
-	    _course_id = self.get_argument("course_id")
+            _course_name = self.get_argument("course_name").encode('utf-8')
+	    print _course_name
+	    print type(_course_name)
+            _teacher_num = self.get_argument("teacher_name").encode('utf-8')
+            _detail = self.get_argument("detail").encode('utf-8')
+	    _course_id = self.get_argument("course_id").encode('utf-8')
             try:
 
                 self.db.execute("INSERT INTO class VALUES({},'{}','{}','{}');".format(_course_id,_course_name, _teacher_num, _detail))
-                print "aa"
 		self.write(
                         json.dumps({"code":0,"information":"Add Course Successful"})
                         )
             except Exception, e:
+		print e
                 self.write(
                         json.dumps({"code":1,"information":"Add Course Fail!"})
                         )
@@ -302,8 +302,8 @@ class SearchCourseHandler(BaseHandler):
                         "code":0,
                         "information":
                                 {
-                                    "class_id":_get[0]['class_id'], "class_name": _get[0]['class_name'].decode('utf-8'),
-                                    "teacher_name":_get[0]['teacher_name'].decode('utf-8') , "other":_get[0]['other'].decode('utf-8')
+                                    "class_id":_get[0]['class_id'], "class_name": _get[0]['class_name'].encode('utf-8'),
+                                    "teacher_name":_get[0]['teacher_name'].encode('utf-8'), "other":_get[0]['other'].encode('utf-8')
                                 }
                             }
                 self.write(
@@ -376,4 +376,23 @@ class TestHandler(BaseHandler):
         self.write(
                 json.dumps({"code":"2","information":"验证超时,请先登录"})
                 )
+class TestCourseaddDepHandler(BaseHandler):
+    """
+        教务处使用，增加课程信息
+    """
+    def post(self):
+	_course_name = self.get_argument("course_name")
+	print _course_name
+	_teacher_num = self.get_argument("teacher_name")
+	_detail = self.get_argument("detail")
+	_course_id = self.get_argument("course_id")
+	try:
+	    #self.db.execute("INSERT INTO class VALUES({},'{}','{}','{}');".format(_course_id,_course_name, _teacher_num, _detail))
+	    print "aa"
+	    self.write(
+		    json.dumps({"code":0,"information":"Add Course Successful"})
+		    )
+	except:
+	    pass
+
 
