@@ -371,31 +371,68 @@ class StudentInfoHandler(StudentHandler):
                     json.dumps({"code":"2","information":"Please Login First!"})
                     )
 
+class DelCourseTableHandler(BaseHandler):
+    def post(self):
+        _token = self.get_argument("token")
+        _delete_course_id = self.get_argument("course_id")
+        _delete_week_num = self.get_argument("week_num")
+        if _dep_dic.has_key(_token):
+            try:
+                self.db.execute("DELETE FROM class_table WHERE week_num = {} \
+                    and course_id = {};".format(_delete_week_num,_delete_course_id))
+                self.write(
+                        json.dumps({"code":"0","information":"删除成功"})
+                        )
+            except Exception,e:
+                self.write(
+                        json.dumps({"code":"2","information":"未知错误"})
+                        )
 
-class AddCourseTableHandler(StudentHandler):
+
+
+class AddCourseTableHandler(BaseHandler):
     """
         添加课表信息
     """
 
     def post(self):
-        _course_id = self.get_argument("course_id")
-        _week_num = self.get_argument("week_num")
-        #  m = {}
-        try:
-            _get = self.db.query("select class_name, location, week_day, time \
-                    from class a NATURAL JOIN class_table b WHERE week_num = {} \
-                    AND course_id = {} ".format(_week_num,_course_id))
-            if _get == []:
-                self.write(json.dumps({"code":"1","information":"Table is null"}))
-            #  if len(_get) > 0:
-                #  for x in _get:
-                    #  m[(str(x['week_day'])+str(x['time']))] = x
-            self.write(json.dumps({"code":"0","information": _get}))
+        """
+            教务处添加课表信息
+        """
+        #  _course_id = self.get_argument("course_id")
+        #  _week_num = self.get_argument("week_num")
+        #test data
+        jsondata = '{"week_num":1,"course_id":1110001,"content":\
+        [{"week_day":0,"time":1,"location":"西十二 N201","class_id":"1110001"}\
+        ,{"week_day":0,"time":2,"location":"西十二 N203","class_id":"1110002"}]}'
 
-        except Exception, e:
-            self.write(
-                    json.dumps({"code":"2","information":"未知错误"})
-                    )
+        _token = self.get_argument("token")
+        _json = self._get_argument("json")
+        if _dep_dic.has_key(_token):
+            obj = json.loads(_json)
+            weeknum = obj['week_num']
+            course_id = obj['course_id']
+            _content = obj['content']
+            for course in _content:
+                try:
+                    self.db.execute('INSERT INTO class_table VALUES\
+                            ({},{},{},{},"{}",{})'.format(
+                                course_id,
+                                weeknum,
+                                course['week_day'],
+                                course['time'],
+                                course['location'].encode('utf-8'),
+                                course['class_id'])
+                            )
+                except Exception, e:
+                    if tuple(e)[0] == 1062:
+                        self.write(
+                            json.dumps({"code":"2","information":"{} 课程添加重复".format(course['class_id'])})
+                            )
+                    else:
+                        self.write(
+                                json.dumps({"code":"3","information":"未知错误"})
+                                )
 
 
 class TestHandler(BaseHandler):
@@ -411,18 +448,16 @@ class TestCourseaddDepHandler(BaseHandler):
         教务处使用，增加课程信息
     """
     def post(self):
-	_course_name = self.get_argument("course_name")
-	print _course_name
-	_teacher_num = self.get_argument("teacher_name")
-	_detail = self.get_argument("detail")
-	_course_id = self.get_argument("course_id")
-	try:
-	    #self.db.execute("INSERT INTO class VALUES({},'{}','{}','{}');".format(_course_id,_course_name, _teacher_num, _detail))
-	    print "aa"
-	    self.write(
-		    json.dumps({"code":0,"information":"Add Course Successful"})
-		    )
-	except:
-	    pass
+        _course_name = self.get_argument("course_name")
+        print _course_name
+        _teacher_num = self.get_argument("teacher_name")
+        _detail = self.get_argument("detail")
+        _course_id = self.get_argument("course_id")
+        try:
+            self.write(
+                json.dumps({"code":0,"information":"Add Course Successful"})
+            )
+        except:
+            pass
 
 
