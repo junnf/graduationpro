@@ -34,6 +34,7 @@ class Application(tornado.web.Application):
                (r'/checkdep',CheckDepHandler),
                (r'/gettable',StudentGetCourseTableHandler),
                (r'/searchcourse',SearchCourseHandler),
+               (r'/dep/addcoursetable',AddCourseTableHandler),
                (r'/dep/addcourse',CourseaddDepHandler),
                (r'/dep/delcourse',CoursedelDepHandler),
                #  (r'/dep/addtable',),

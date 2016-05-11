@@ -407,7 +407,7 @@ class AddCourseTableHandler(BaseHandler):
         ,{"week_day":0,"time":2,"location":"西十二 N203","class_id":"1110002"}]}'
 
         _token = self.get_argument("token")
-        _json = self._get_argument("json")
+        _json = self.get_argument("json")
         if _dep_dic.has_key(_token):
             obj = json.loads(_json)
             weeknum = obj['week_num']
