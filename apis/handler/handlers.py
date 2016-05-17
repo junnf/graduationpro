@@ -479,7 +479,7 @@ class StudentFriendListHandler(StudentHandler):
             #_user 用来在SQL语句中的WHERE条件中起到作用
             try:
                 #修改个人信息
-                self.db.query("select * from user_friend where user_name = '{}'".format(_user))
+                self.db.query("select * from user_friend where name = '{}'".format(_user))
 
             except Exception, e:
                 self.write(
@@ -509,7 +509,7 @@ class StudentFriendAddHandler(StudentHandler):
             #_user = _dic[_token]
             #_user 用来在SQL语句中的WHERE条件中起到作用
             try:
-                _temp = self.db.query("select * from user_friend where user_name = '{}' and friend_name = '{}'".format(_user,_friend))
+                _temp = self.db.query("select * from user_friend where name = '{}' and friend_name = '{}'".format(_user,_friend))
                 if _temp == []:
                     self.write(
                         json.dumps({"code":1,"information":"该好友已经在您好友列表中"})
@@ -554,7 +554,7 @@ class StudentFriendDelHandler(StudentHandler):
             #_user = _dic[_token]
             #_user 用来在SQL语句中的WHERE条件中起到作用
             try:
-                self.db.execute("delete from user_friend where _user = '{}' \
+                self.db.execute("delete from user_friend where name = '{}' \
                         and friend_name = '{}')".format(_user, _friend))
                 self.write(
                     json.dumps({"code":0,"information":"删除好友成功"})
