@@ -43,7 +43,9 @@ class Application(tornado.web.Application):
                (r'/student/editinfo',StudentInfoHandler),
                (r'/testcharset',TestHandler),
                (r'/test',TestCourseaddDepHandler),
-
+               (r'/friend/get',StudentFriendListHandler),
+               (r'/friend/addfriend',StudentFriendAddHandler),
+               (r'/friend/delfriend',StudentFriendDelHandler)
                 ]
         settings = {
             "cookie_secret":"d2oEZ8T3TOqr1vhqDK2iIEilDgJ9OUO9lWyA+fGJ7tA=",

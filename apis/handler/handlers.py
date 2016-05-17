@@ -444,6 +444,7 @@ class TestHandler(BaseHandler):
                 )
 
 class TestCourseaddDepHandler(BaseHandler):
+
     """
         教务处使用，增加课程信息
     """
@@ -459,5 +460,112 @@ class TestCourseaddDepHandler(BaseHandler):
             )
         except:
             pass
+
+
+class StudentFriendListHandler(StudentHandler):
+    """
+        获得学生列表
+
+    """
+
+    def post(self):
+        #student personal info edit
+        _token = self.get_argument("token")
+        _user = self.get_argument("user")
+       #_user 用来在SQL语句中的WHERE条件中起到作用
+
+        if self.check_student(_token) == False:
+            _user = _dic[_token]
+            #_user 用来在SQL语句中的WHERE条件中起到作用
+            try:
+                #修改个人信息
+                self.db.query("select * from user_friend where user_name = '{}'".format(_user))
+
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":3,"information":"修改信息失败"})
+                        )
+        else:
+            #Login Fail
+            self.write(
+                    json.dumps({"code":"2","information":"未知错误"})
+                    )
+
+
+class StudentFriendAddHandler(StudentHandler):
+    """
+        添加好友
+
+    """
+
+    def post(self):
+        #student personal info edit
+        _token = self.get_argument("token")
+        _user = self.get_argument("user")
+        _friend = self.get_argument("friend")
+       #_user 用来在SQL语句中的WHERE条件中起到作用
+
+        if self.check_student(_token) == False:
+            #_user = _dic[_token]
+            #_user 用来在SQL语句中的WHERE条件中起到作用
+            try:
+                _temp = self.db.query("select * from user_friend where user_name = '{}' and friend_name = '{}'".format(_user,_friend))
+                if _temp == []:
+                    self.write(
+                        json.dumps({"code":1,"information":"该好友已经在您好友列表中"})
+                        )
+                else:
+                    if self.db.query("select * from user_student where name = '{}'".format(_friend)) == []:
+                        self.write(
+                            json.dumps({"code":2,"information":"该用户不存在"})
+                        )
+                    else:
+                        self.db.execute("insert into user_friend values(null,'{}','{}')".format(_user, _friend))
+                        self.write(
+                            json.dumps({"code":0,"information":"添加好友成功"})
+                        )
+
+
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":3,"information":"存在未知错误"})
+                        )
+        else:
+            #Login Fail
+            self.write(
+                    json.dumps({"code":"2","information":"未知错误"})
+                    )
+
+
+class StudentFriendDelHandler(StudentHandler):
+    """
+       删除好友
+
+    """
+
+    def post(self):
+        #student personal info edit
+        _token = self.get_argument("token")
+        _user = self.get_argument("user")
+        _friend = self.get_argument("friend")
+       #_user 用来在SQL语句中的WHERE条件中起到作用
+
+        if self.check_student(_token) == False:
+            #_user = _dic[_token]
+            #_user 用来在SQL语句中的WHERE条件中起到作用
+            try:
+                self.db.execute("delete from user_friend where _user = '{}' \
+                        and friend_name = '{}')".format(_user, _friend))
+                self.write(
+                    json.dumps({"code":0,"information":"删除好友成功"})
+                )
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":3,"information":"存在未知错误"})
+                        )
+        else:
+            self.write(
+                    json.dumps({"code":"2","information":"未知错误"})
+                    )
 
 
