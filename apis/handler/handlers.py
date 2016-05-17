@@ -38,7 +38,7 @@ class RegisterHandler(BaseHandler):
         _course = self.get_argument("course")
         _sex = self.get_argument("sex")
         try:
-            self.db.execute("INSERT INTO user VALUES('{}','{}','MD5({})','{}','{}');".format(_uid,_user,_pass,_sex,_course))
+            self.db.execute("INSERT INTO user_student VALUES({},'{}',MD5('{}'),'{}','{}');".format(_uid,_user,_pass,_sex,_course))
             self.write({"code":0,"information":"Register Successful"})
         except Exception, e:
             if tuple(e)[0] == 1062:
