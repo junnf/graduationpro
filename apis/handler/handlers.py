@@ -471,11 +471,11 @@ class StudentFriendListHandler(StudentHandler):
     def post(self):
         #student personal info edit
         _token = self.get_argument("token")
-        _user = self.get_argument("user")
+        #_user = self.get_argument("user")
        #_user 用来在SQL语句中的WHERE条件中起到作用
 
         if self.check_student(_token) == False:
-            #_user = _dic[_token]
+            _user = _dic[_token]
             #_user 用来在SQL语句中的WHERE条件中起到作用
             try:
                 #修改个人信息
@@ -505,12 +505,11 @@ class StudentFriendAddHandler(StudentHandler):
     def post(self):
         #student personal info edit
         _token = self.get_argument("token")
-        _user = self.get_argument("user")
         _friend = self.get_argument("friend")
        #_user 用来在SQL语句中的WHERE条件中起到作用
 
-        if self.check_student(_token) == False:
-            #_user = _dic[_token]
+        if self.check_student(_token):
+            _user = _dic[_token]
             #_user 用来在SQL语句中的WHERE条件中起到作用
             try:
                 _temp = self.db.query("select * from user_friend where name = '{}' and friend_name = '{}'".format(_user,_friend))
@@ -550,12 +549,11 @@ class StudentFriendDelHandler(StudentHandler):
     def post(self):
         #student personal info edit
         _token = self.get_argument("token")
-        _user = self.get_argument("user")
         _friend = self.get_argument("friend")
        #_user 用来在SQL语句中的WHERE条件中起到作用
 
-        if self.check_student(_token) == False:
-            #_user = _dic[_token]
+        if self.check_student(_token):
+            _user = _dic[_token]
             #_user 用来在SQL语句中的WHERE条件中起到作用
             try:
                 self.db.execute("delete from user_friend where name = '{}' \
