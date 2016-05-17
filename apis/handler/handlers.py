@@ -475,7 +475,7 @@ class StudentFriendListHandler(StudentHandler):
        #_user 用来在SQL语句中的WHERE条件中起到作用
 
         if self.check_student(_token) == False:
-            _user = _dic[_token]
+            #_user = _dic[_token]
             #_user 用来在SQL语句中的WHERE条件中起到作用
             try:
                 #修改个人信息
