@@ -264,6 +264,7 @@ class StudentGetCourseTableHandler(StudentHandler):
     def post(self):
         _course_id = self.get_argument("course_id")
         _week_num = self.get_argument("week_num")
+	print _course_id,_week_num
         #  m = {}
         try:
             _get = self.db.query("select class_name, location, week_day, time \
