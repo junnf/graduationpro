@@ -272,9 +272,11 @@ class StudentGetCourseTableHandler(StudentHandler):
                     AND course_id = {} ".format(_week_num,_course_id))
             if _get == []:
                 self.write(json.dumps({"code":"1","information":"Table is null"}))
+                return
             #  if len(_get) > 0:
                 #  for x in _get:
                     #  m[(str(x['week_day'])+str(x['time']))] = x
+            print _get
             self.write(json.dumps({"code":"0","information": _get}))
 
         except Exception, e:
@@ -484,7 +486,7 @@ class StudentFriendListHandler(StudentHandler):
             	self.write(
                     json.dumps({"code":"0","information": _json})
                     )
-		
+
 
             except Exception, e:
                 self.write(
