@@ -582,11 +582,14 @@ class SendMessageHandler(StudentHandler):
         _token = self.get_argument("token")
         _friend = self.get_argument("friend")
         _content = self.get_argument("content")
+
         if self.check_student(_token):
+
             _user = _dic[_token]
+	    print _user, _friend, _content
             try:
                 self.db.execute("insert into message values(null,\
-                        '{}','{}','{}',null)".format(_user, _friend, _content))
+                        '{}','{}','{}',null)".format(_user, _friend, _content.encode('utf-8')))
                 self.write(
                     json.dumps({"code":0,"information":"发送成功"})
                 )
@@ -604,7 +607,7 @@ class GetMessageListHandler(StudentHandler):
         if self.check_student(_token):
             _user = _dic[_token]
             try:
-                _get = self.db.query("select object, content, time where send \
+                _get = self.db.query("select object, content, time from message where send \
                         = '{}' order by time DESC".format(_user))
                 if _get == []:
                     #if no message
