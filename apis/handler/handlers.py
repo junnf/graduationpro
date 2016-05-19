@@ -477,7 +477,7 @@ class StudentFriendListHandler(StudentHandler):
         #_user = self.get_argument("user")
        #_user 用来在SQL语句中的WHERE条件中起到作用
 
-        if self.check_student(_token) == False:
+        if self.check_student(_token):
             _user = _dic[_token]
             #_user 用来在SQL语句中的WHERE条件中起到作用
             try:
@@ -617,8 +617,3 @@ class GetMessageListHandler(StudentHandler):
                 self.write(
                         json.dumps({"code":3,"information":"存在未知错误"})
                         )
-
-
-
-
-
