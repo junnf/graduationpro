@@ -573,4 +573,52 @@ class StudentFriendDelHandler(StudentHandler):
                     json.dumps({"code":"2","information":"未知错误"})
                     )
 
+class SendMessageHandler(StudentHandler):
+    """
+        发送信息
+    """
+
+    def post(self):
+        _token = self.get_argument("token")
+        _friend = self.get_argument("friend")
+        _content = self.get_argument("content")
+        if self.check_student(_token):
+            _user = _dic[_token]
+            try:
+                self.db.execute("insert into message values(null,\
+                        '{}','{}','{}',null)".format(_user, _friend, _content))
+                self.write(
+                    json.dumps({"code":0,"information":"发送成功"})
+                )
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":3,"information":"存在未知错误"})
+                        )
+
+
+
+class GetMessageListHandler(StudentHandler):
+
+    def post(self):
+        _token = self.get_argument("token")
+        if self.check_student(_token):
+            _user = _dic[_token]
+            try:
+                _get = self.db.query("select object, content, time where send \
+                        = '{}' order by time DESC".format(_user))
+                if _get == []:
+                    #if no message
+                    return
+
+                self.write(
+                    json.dumps({"code":0,"information":_get})
+                )
+            except Exception, e:
+                self.write(
+                        json.dumps({"code":3,"information":"存在未知错误"})
+                        )
+
+
+
+
 

@@ -45,7 +45,9 @@ class Application(tornado.web.Application):
                (r'/test',TestCourseaddDepHandler),
                (r'/friend/get',StudentFriendListHandler),
                (r'/friend/addfriend',StudentFriendAddHandler),
-               (r'/friend/delfriend',StudentFriendDelHandler)
+               (r'/friend/delfriend',StudentFriendDelHandler),
+               (r'/sendmsg',SendMessageHandler),
+               (r'/getmsg',GetMessageListHandler),
                 ]
         settings = {
             "cookie_secret":"d2oEZ8T3TOqr1vhqDK2iIEilDgJ9OUO9lWyA+fGJ7tA=",
