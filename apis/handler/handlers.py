@@ -604,19 +604,31 @@ class GetMessageListHandler(StudentHandler):
 
     def post(self):
         _token = self.get_argument("token")
+	_msg = []
         if self.check_student(_token):
             _user = _dic[_token]
             try:
-                _get = self.db.query("select object, content, time from message where send \
+                _get = self.db.query("select send, content, time from message where object \
                         = '{}' order by time DESC".format(_user))
                 if _get == []:
                     #if no message
                     return
-
+		else:
+                    for x in _get:
+			#_msg.append("发送自")
+			
+			_msg.append("发送自:{}  \t".format(x['send'])  
+				+ "{}-{}-{} {}:{}".format(x['time'].year, x['time'].month, x['time'].day, 
+				    (x['time'].hour+8)%24, x['time'].minute) + "  " +  x['content'].encode('utf-8')
+				)
                 self.write(
-                    json.dumps({"code":0,"information":_get})
+                    json.dumps({"code":0,"information":_msg})
                 )
             except Exception, e:
                 self.write(
                         json.dumps({"code":3,"information":"存在未知错误"})
                         )
+
+class AHandler(BaseHandler):
+    def get(self):
+	pass
